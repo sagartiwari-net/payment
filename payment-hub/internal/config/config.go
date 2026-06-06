@@ -37,8 +37,8 @@ func Load() (*Config, error) {
 	viper.AutomaticEnv()
 
 	viper.SetDefault("APP_ENV", "development")
-	viper.SetDefault("APP_PORT", "8080")
-	viper.SetDefault("APP_URL", "http://localhost:8080")
+	viper.SetDefault("APP_PORT", "8090")
+	viper.SetDefault("APP_URL", "http://localhost:8090")
 	viper.SetDefault("DB_HOST", "127.0.0.1")
 	viper.SetDefault("DB_PORT", "3306")
 	viper.SetDefault("DB_NAME", "paymentsystem")

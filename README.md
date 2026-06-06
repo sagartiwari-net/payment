@@ -39,7 +39,7 @@ Yeh values set karo:
 
 ```env
 APP_ENV=production
-APP_PORT=8080
+APP_PORT=8090
 APP_URL=https://buyahref.com
 
 DB_HOST=127.0.0.1
@@ -78,7 +78,7 @@ nohup ./bin/payment-hub > payment-hub.log 2>&1 &
 VPS par:
 
 ```bash
-curl http://127.0.0.1:8080/health
+curl http://127.0.0.1:8090/health
 ```
 
 Expected:
@@ -140,5 +140,5 @@ cd payment-hub
 make docker-up
 make migrate-docker
 make run
-curl http://localhost:8080/health
+curl http://localhost:8090/health
 ```

@@ -4,6 +4,8 @@ Path on server: `/www/wwwroot/buyahref.com/payment`
 
 Public URL: `https://buyahref.com/payment/health`
 
+> **Port 8090** — Payment Hub alag port use karta hai taaki `8080` par jo doosra Go project chal raha hai usse conflict na ho.
+
 ---
 
 ## Part 1 — phpMyAdmin (SQL Tables)
@@ -41,7 +43,7 @@ cd /www/wwwroot/buyahref.com/payment/payment-hub
 ```bash
 cat > /www/wwwroot/buyahref.com/payment/payment-hub/.env << 'EOF'
 APP_ENV=production
-APP_PORT=8080
+APP_PORT=8090
 APP_URL=https://buyahref.com/payment
 
 DB_HOST=127.0.0.1
@@ -99,7 +101,7 @@ cd /www/wwwroot/buyahref.com/payment/payment-hub
 Dusre terminal mein test:
 
 ```bash
-curl http://127.0.0.1:8080/health
+curl http://127.0.0.1:8090/health
 ```
 
 `"database":"ok"` aana chahiye. Stop: `Ctrl+C`
@@ -137,7 +139,7 @@ aaPanel → **Website** → **buyahref.com** → **Config** (Nginx config)
 
 ```nginx
     location /payment/ {
-        proxy_pass http://127.0.0.1:8080/;
+        proxy_pass http://127.0.0.1:8090/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -205,7 +207,7 @@ nohup ./bin/payment-hub > payment-hub.log 2>&1 &
 | `Access denied` DB | `.env` password check; aaPanel → Database user `paymentsystem` |
 | `connection refused` curl | `./bin/payment-hub` chal raha hai? `ps aux \| grep payment-hub` |
 | 404 on /payment/health | Nginx config add kiya + reload? |
-| 502 Bad Gateway | Go app port 8080 par run ho raha hai? |
+| 502 Bad Gateway | Go app port 8090 par run ho raha hai? |
 | Permission denied | `chown -R www:www /www/wwwroot/buyahref.com/payment` |
 
 ---
