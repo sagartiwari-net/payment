@@ -129,6 +129,34 @@ cd /www/wwwroot/buyahref.com/payment/payment-hub
 nohup ./bin/payment-hub > payment-hub.log 2>&1 &
 ```
 
+### Git pull error: dubious ownership
+
+Agar `git pull` par ownership error aaye:
+
+```bash
+git config --global --add safe.directory /www/wwwroot/buyahref.com/payment
+cd /www/wwwroot/buyahref.com/payment
+git pull
+```
+
+### nohup Exit 1 (port already in use)
+
+Pehle check karo process chal raha hai:
+
+```bash
+ps aux | grep payment-hub
+curl http://127.0.0.1:8090/health
+```
+
+Agar health OK hai to dubara start mat karo. Sirf ek process hona chahiye:
+
+```bash
+pkill -f "/www/wwwroot/buyahref.com/payment/payment-hub/bin/payment-hub"
+sleep 1
+cd /www/wwwroot/buyahref.com/payment/payment-hub
+nohup ./bin/payment-hub > payment-hub.log 2>&1 &
+```
+
 ---
 
 ## Part 3 — Apache Reverse Proxy (aaPanel)
@@ -164,7 +192,17 @@ Galat config (double slash banata hai):
 ProxyPass /payment http://127.0.0.1:8090/
 ```
 
-Sahi config — extension file mein yeh hona chahiye (**443 aur 80 dono** ke extension mein, ya common include):
+### Working config file (copy-paste)
+
+Repo mein ready file: `payment-hub/deploy/apache-payment.conf`
+
+VPS par:
+
+```bash
+nano /www/server/panel/vhost/apache/extension/buyahref.com/payment.conf
+```
+
+Paste karo (ya repo se copy):
 
 ```apache
 <IfModule mod_proxy.c>
@@ -176,11 +214,7 @@ Sahi config — extension file mein yeh hona chahiye (**443 aur 80 dono** ke ext
 </IfModule>
 ```
 
-Reload:
-
-```bash
-/etc/init.d/httpd reload
-```
+Reload: `/etc/init.d/httpd reload`
 
 ### Kyun `//health` error aata hai?
 
