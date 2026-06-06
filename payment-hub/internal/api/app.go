@@ -2,10 +2,13 @@ package api
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/buyahref/payment-hub/internal/api/handlers"
 	"github.com/buyahref/payment-hub/internal/api/middleware"
 	"github.com/buyahref/payment-hub/internal/config"
+	"github.com/buyahref/payment-hub/internal/repository"
+	"github.com/buyahref/payment-hub/internal/services"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"go.uber.org/zap"
@@ -21,9 +24,24 @@ func NewApp(cfg *config.Config, log *zap.Logger, db *sql.DB) *fiber.App {
 	app.Use(middleware.NormalizePath())
 	app.Use(middleware.RequestLogger(log))
 
+	merchantRepo := repository.NewMerchantRepository(db)
+	orderRepo := repository.NewOrderRepository(db)
+	orderService := services.NewOrderService(orderRepo, cfg.AppURL, cfg.OrderExpiryMinutes)
+
 	healthHandler := handlers.NewHealthHandler(db, cfg.AppEnv)
+	orderHandler := handlers.NewOrderHandler(orderService)
 
 	app.Get("/health", healthHandler.Health)
+
+	maxSkew := time.Duration(cfg.SignatureMaxAgeMinutes) * time.Minute
+	rateLimiter := middleware.NewRateLimiter(100, 20, time.Minute)
+
+	api := app.Group("/api/v1")
+	api.Use(rateLimiter.Middleware())
+	api.Use(middleware.MerchantAuth(merchantRepo, maxSkew))
+
+	api.Post("/orders/create", orderHandler.Create)
+	api.Get("/orders/:order_id/verify", orderHandler.Verify)
 
 	return app
 }

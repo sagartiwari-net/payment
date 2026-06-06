@@ -24,6 +24,9 @@ type Config struct {
 	PhonePeSaltKey    string
 	PhonePeSaltIndex  string
 	PhonePeEnv        string
+
+	OrderExpiryMinutes    int
+	SignatureMaxAgeMinutes int
 }
 
 func Load() (*Config, error) {
@@ -50,6 +53,8 @@ func Load() (*Config, error) {
 	viper.SetDefault("PHONEPE_SALT_KEY", "")
 	viper.SetDefault("PHONEPE_SALT_INDEX", "1")
 	viper.SetDefault("PHONEPE_ENV", "PRODUCTION")
+	viper.SetDefault("ORDER_EXPIRY_MINUTES", 30)
+	viper.SetDefault("SIGNATURE_MAX_AGE_MINUTES", 5)
 
 	cfg := &Config{
 		AppEnv:   viper.GetString("APP_ENV"),
@@ -67,6 +72,9 @@ func Load() (*Config, error) {
 		PhonePeSaltKey:    viper.GetString("PHONEPE_SALT_KEY"),
 		PhonePeSaltIndex:  viper.GetString("PHONEPE_SALT_INDEX"),
 		PhonePeEnv:        viper.GetString("PHONEPE_ENV"),
+
+		OrderExpiryMinutes:     viper.GetInt("ORDER_EXPIRY_MINUTES"),
+		SignatureMaxAgeMinutes: viper.GetInt("SIGNATURE_MAX_AGE_MINUTES"),
 	}
 
 	if cfg.DBPass == "" && cfg.AppEnv == "production" {

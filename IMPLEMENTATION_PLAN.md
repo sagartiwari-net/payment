@@ -1007,15 +1007,15 @@ export async function POST(req: Request) {
 
 | Task | Details | Done |
 |------|---------|------|
-| 2.1 | HMAC signing library (`internal/security/hmac.go`) | [ ] |
-| 2.2 | Auth middleware (verify signature + timestamp) | [ ] |
-| 2.3 | Rate limit middleware (Redis) | [ ] |
-| 2.4 | `POST /api/v1/orders/create` handler | [ ] |
-| 2.5 | Order state machine in service layer | [ ] |
-| 2.6 | Payment token generation (UUID) | [ ] |
-| 2.7 | `GET /api/v1/orders/:id/verify` handler | [ ] |
-| 2.8 | Duplicate order prevention (409) | [ ] |
-| 2.9 | Unit tests for HMAC + state machine | [ ] |
+| 2.1 | HMAC signing library (`internal/security/hmac.go`) | [x] |
+| 2.2 | Auth middleware (verify signature + timestamp) | [x] |
+| 2.3 | Rate limit middleware (in-memory; Redis later) | [x] |
+| 2.4 | `POST /api/v1/orders/create` handler | [x] |
+| 2.5 | Order state machine in service layer | [x] |
+| 2.6 | Payment token generation (UUID) | [x] |
+| 2.7 | `GET /api/v1/orders/:id/verify` handler | [x] |
+| 2.8 | Duplicate order prevention (409) | [x] |
+| 2.9 | Unit tests for HMAC + state machine | [x] |
 
 **Deliverable:** Can create and verify orders via API (Postman/curl)
 
