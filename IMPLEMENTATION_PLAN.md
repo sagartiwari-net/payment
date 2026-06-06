@@ -1026,14 +1026,14 @@ export async function POST(req: Request) {
 
 | Task | Details | Done |
 |------|---------|------|
-| 3.1 | PhonePe client (`internal/phonepe/client.go`) | [ ] |
-| 3.2 | PhonePe webhook verification | [ ] |
-| 3.3 | Checkout page HTML template (`/pay/{token}`) | [ ] |
-| 3.4 | PhonePe payment initiation from checkout page | [ ] |
-| 3.5 | `POST /webhooks/phonepe` handler | [ ] |
-| 3.6 | Return URL handler (`/pay/{token}/return`) | [ ] |
-| 3.7 | PhonePe status check API (backup verification) | [ ] |
-| 3.8 | Test with PhonePe UAT/sandbox environment | [ ] |
+| 3.1 | PhonePe client (`internal/phonepe/client.go`) | [x] |
+| 3.2 | PhonePe webhook verification | [x] |
+| 3.3 | Checkout page HTML template (`/pay/{token}`) | [x] |
+| 3.4 | PhonePe payment initiation from checkout page | [x] |
+| 3.5 | `POST /webhooks/phonepe` handler | [x] |
+| 3.6 | Return URL handler (`/pay/{token}/return`) | [x] |
+| 3.7 | PhonePe status check API (backup verification) | [x] |
+| 3.8 | Test with PhonePe production payment | [ ] |
 
 **Deliverable:** Can complete a real test payment on buyahref.com
 
