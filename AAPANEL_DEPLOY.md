@@ -131,7 +131,76 @@ nohup ./bin/payment-hub > payment-hub.log 2>&1 &
 
 ---
 
-## Part 3 — Nginx (buyahref.com/payment URL)
+## Part 3 — Apache Reverse Proxy (aaPanel)
+
+> **Important:** Main VirtualHost config mat edit karo. aaPanel reverse proxy alag file mein likhta hai:  
+> `/www/server/panel/vhost/apache/extension/buyahref.com/`
+
+### Option A — aaPanel UI (recommended)
+
+Website → **buyahref.com** → **Reverse proxy** → Add:
+
+| Field | Value |
+|-------|-------|
+| Proxy name | payment |
+| Proxy dir | `/payment/` ← **trailing slash zaroori** |
+| Target URL | `http://127.0.0.1:8090/` ← **trailing slash zaroori** |
+| Sent Domain | `$host` |
+| Show Proxy Path | OFF |
+
+Save → Apache Reload
+
+### Option B — Manual fix (agar `Cannot GET //health` aaye)
+
+Pehle current config dekho:
+
+```bash
+cat /www/server/panel/vhost/apache/extension/buyahref.com/*.conf
+```
+
+Galat config (double slash banata hai):
+
+```apache
+ProxyPass /payment http://127.0.0.1:8090/
+```
+
+Sahi config — extension file mein yeh hona chahiye (**443 aur 80 dono** ke extension mein, ya common include):
+
+```apache
+<IfModule mod_proxy.c>
+    ProxyPreserveHost On
+    ProxyRequests Off
+
+    ProxyPass        /payment/ http://127.0.0.1:8090/
+    ProxyPassReverse /payment/ http://127.0.0.1:8090/
+</IfModule>
+```
+
+Reload:
+
+```bash
+/etc/init.d/httpd reload
+```
+
+### Kyun `//health` error aata hai?
+
+```
+Request:  /payment/health
+Galat:    8090/ + /health  =  //health  ❌
+Sahi:     8090/ + health   =  /health   ✅
+```
+
+Dono side trailing slash (`/payment/` aur `8090/`) se fix hota hai.
+
+### Test
+
+```bash
+curl https://buyahref.com/payment/health
+```
+
+---
+
+## Part 3b — Nginx (sirf agar Nginx use karte ho)
 
 aaPanel → **Website** → **buyahref.com** → **Config** (Nginx config)
 

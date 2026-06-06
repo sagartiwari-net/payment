@@ -18,6 +18,7 @@ func NewApp(cfg *config.Config, log *zap.Logger, db *sql.DB) *fiber.App {
 	})
 
 	app.Use(recover.New())
+	app.Use(middleware.NormalizePath())
 	app.Use(middleware.RequestLogger(log))
 
 	healthHandler := handlers.NewHealthHandler(db, cfg.AppEnv)
