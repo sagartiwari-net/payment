@@ -1,0 +1,11 @@
+version: "2"
+sql:
+  - engine: "mysql"
+    queries: "sql/queries.sql"
+    schema: "migrations"
+    gen:
+      go:
+        package: "db"
+        out: "internal/database/queries"
+        emit_json_tags: true
+        emit_empty_slices: true
